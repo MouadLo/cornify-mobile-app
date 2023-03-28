@@ -1,0 +1,42 @@
+type ShippingAddress {
+  address: String
+  city: String
+  postalCode: String
+  country: String
+}
+
+type Item @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  price: Float
+  image: String
+  product: ID
+  qty: Int!
+  orderID: ID! @index(name: "byOrder")
+}
+
+type Order @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  orderItems: [Item] @hasMany(indexName: "byOrder", fields: ["id"])
+  use: ID
+  paymentMethod: String
+  taxPric: Float
+  shippingPrice: Float
+  totalPrice: Float
+  isPaid: Boolean
+  paidAt: AWSDate
+  isDevlivered: Boolean
+  deliveredAt: AWSDate
+  shippingAddress: [ShippingAddress]
+}
+
+type Product @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String!
+  image: String!
+  brand: String!
+  category: String!
+  description: String
+  price: Float!
+  countInStock: Int!
+}
